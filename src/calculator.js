@@ -1,30 +1,18 @@
 export class Calculator{
-    get divider(){return ',';}
-    get replacableDivider(){return '\n';}
-
-    constructor() {
-    }
-
-    calculate(numbers){
-        if(numbers.length > 1){
-            return numbers.reduce((x,y) => +x + +y);
-        }
-
-        if(numbers[0]){
-            return +numbers[0];
-        }
-        return 0;
-    }
-
-    parseInput(str){
-        str = str.replace(this.replacableDivider, this.divider);
-
-        return str.split(this.divider);
-    }
 
     add(str){
-        let numbers = this.parseInput(str);
+        let regex = /\/\/(.*)\n/;
+        let regResult = str.match(regex);
 
-        return this.calculate(numbers);
+        if(regResult){
+            str = str.replace(regResult[0],'');
+            str = str.replace(regResult[1],',');
+        }
+
+        str = str.replace('\n',',');
+
+        let numbers = str.split(',');
+
+        return numbers.reduce((x,y) => +x + +y);
     }
 }
