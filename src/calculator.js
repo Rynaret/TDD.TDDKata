@@ -1,18 +1,34 @@
 export class Calculator{
 
-    add(str){
-        let regex = /\/\/(.*)\n/;
-        let regResult = str.match(regex);
+    get divider(){return ','};
+    get maxAvailableValue(){return 1000};
 
-        if(regResult){
-            str = str.replace(regResult[0],'');
-            str = str.replace(regResult[1],',');
+    checkNumbers(numbers){
+        let newNumbers = [];
+        numbers.forEach((item)=>{
+           if(+item <= this.maxAvailableValue){
+               newNumbers.push(+item);
+           }
+        });
+        return newNumbers;
+    }
+
+    add(str){
+        const regEx = /\/\/\[?(.*)]?\n/;
+        let regExResult = str.match(regEx);
+
+        if(regExResult){
+            str = str.replace(regExResult[0], '');
+            let newDivider = regExResult[1].replace(']','');
+            str = str.split(newDivider).join(this.divider)
         }
 
-        str = str.replace('\n',',');
+        str = str.replace('\n', this.divider);
 
-        let numbers = str.split(',');
+        let numbers = str.split(this.divider);
 
-        return numbers.reduce((x,y) => +x + +y);
+        numbers = this.checkNumbers(numbers);
+
+        return numbers.reduce((x,y)=> x + y);
     }
 }
