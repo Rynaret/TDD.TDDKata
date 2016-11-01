@@ -1,50 +1,64 @@
 import assert from 'assert'
-import {add} from '../src/calculator'
+import { Calculator } from '../src/calculator'
+//The method can take 0, 1 or 2 numbers, and will
+// return their sum (for an empty string it will return 0) for example “” or “1” or “1,2”
+suite('When input is empty string', ()=>{
+    test('then calculator returns 0', ()=> {
+        const inputString = '';
+        let calculator = new Calculator();
 
-suite('When Add with String Calculator', function () {
-    suite('when there is no delimeter', function() {
-        test('for an empty string it will return 0', function() {
-            let emptyString = '';
+        let calculatorResult = calculator.add(inputString);
 
-            let sum = add(emptyString);
-
-            assert.equal(0, sum);
-        });
-
-        test('for 1 as input string it will return 1', function() {
-            let input = '1';
-
-            let sum = add(input);
-
-            assert.equal(1, sum);
-        });
+        assert.equal(0, calculatorResult);
     });
-
-    suite('with Comma as delimeter', function() {
-        test('for 1,2 as input string it will return sum of 1 and 2', function() {
-            let input = "1,2";
-
-            let sum = add(input);
-
-            assert.equal(1+2, sum);
-        });
-
-        test('for 3,5,54 as input string it will return sum of 3, 5 and 54', function() {
-            let input = "3,5,54";
-
-            let sum = add(input);
-
-            assert.equal(3 + 5 + 54, sum);
-        });
-    });
-
-    suite('with NewLine and Comma delimeters', function() {
-        test('for 154\n9,6 as input string it will return sum of 154, 9 and 6', function() {
-            let input = '154\n9,6';
-            
-            let sum = add(input);
-
-            assert.equal(154 + 9 + 6, sum);
-        })
-    })
 });
+suite('When input is "1"', ()=>{
+    test('then calculator returns 1', ()=> {
+        const inputString = '1';
+        let calculator = new Calculator();
+
+        let calculatorResult = calculator.add(inputString);
+
+        assert.equal(1, calculatorResult);
+    });
+});
+suite('When input is "1,2"', ()=>{
+    test('then calculator returns 1 + 2', ()=> {
+        const inputString = '1,2';
+        let calculator = new Calculator();
+
+        let calculatorResult = calculator.add(inputString);
+
+        assert.equal(1 + 2, calculatorResult);
+    });
+});
+// Allow the Add method to handle an unknown amount of numbers
+suite('When input is "1,2,4,5"', ()=>{
+    test('then calculator returns 1 + 2 + 4 + 5', ()=> {
+        const inputString = '1,2,4,5';
+        let calculator = new Calculator();
+
+        let calculatorResult = calculator.add(inputString);
+
+        assert.equal(1 + 2 + 4 + 5, calculatorResult);
+    });
+});
+// Allow the Add method to handle new lines between numbers (instead of commas).
+// the following input is ok:  “1\n2,3”  (will equal 6)
+// the following input is NOT ok:  “1,\n” (not need to prove it - just clarifying)
+suite('When input is "1\\n2,3"', ()=>{
+    test('then calculator returns 1 + 2 + 3', ()=> {
+        const inputString = '1\n2,3';
+        let calculator = new Calculator();
+
+        let calculatorResult = calculator.add(inputString);
+
+        assert.equal(1 + 2 + 3, calculatorResult);
+    });
+});
+// Support different delimiters
+// to change a delimiter, the beginning of the string will contain
+// a separate line that looks like
+// this:   “//[delimiter]\n[numbers…]” for example “//;\n1;2” should
+// return three where the default delimiter is ‘;’ .
+// the first line is optional. all existing scenarios should still be supported

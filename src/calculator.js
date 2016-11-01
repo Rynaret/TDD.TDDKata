@@ -1,23 +1,30 @@
-var delimeter = /,|\n/;
+export class Calculator{
+    get divider(){return ',';}
+    get replacableDivider(){return '\n';}
 
-function calculateSumWithDelimeters(input) {
-    let numbers = input.split(delimeter);
-    let sum = 0;
-    for (let i = 0; i < numbers.length; i++) {
-        sum += parseInt(numbers[i]);
+    constructor() {
     }
-    return sum;
-}
 
-function hasDelimeter(input) {
-    let numbers = input.split(delimeter);
-    return numbers.length > 1;
-}
+    calculate(numbers){
+        if(numbers.length > 1){
+            return numbers.reduce((x,y) => +x + +y);
+        }
 
-export function add(input) {
-    if (input == '') return 0;
+        if(numbers[0]){
+            return +numbers[0];
+        }
+        return 0;
+    }
 
-    if (!hasDelimeter(input)) return parseInt(input);
+    parseInput(str){
+        str = str.replace(this.replacableDivider, this.divider);
 
-    return calculateSumWithDelimeters(input);
+        return str.split(this.divider);
+    }
+
+    add(str){
+        let numbers = this.parseInput(str);
+
+        return this.calculate(numbers);
+    }
 }
